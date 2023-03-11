@@ -1,4 +1,3 @@
-//Weare simulating a tuple class in Java.
 //Define a Tuple class
 class Tuple {
     private int first;
