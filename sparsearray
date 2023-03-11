@@ -1,0 +1,80 @@
+public class SparseArray {
+    private int numRows;
+    private int numCols;
+    private List<Node> nodeList;
+
+    public SparseArray(int numRows, int numCols) {
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.nodeList = new ArrayList<Node>();
+    }
+    public void set(int row, int col, int value) {
+        if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (value == 0) {
+            removeNode(row, col);
+        } else {
+            Node node = findNode(row, col);
+            if (node == null) {
+                node = new Node(row, col, value);
+                addNode(node);
+            } else {
+                node.value = value;
+            }
+        }
+    }
+    public int get(int row, int col) {
+        if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node node = findNode(row, col);
+        if (node == null) {
+            return 0;
+        } else {
+            return node.value;
+        }
+    }
+
+    private Node findNode(int row, int col) {
+        for (Node node : nodeList) {
+            if (node.row == row && node.col == col) {
+                return node;
+            }
+        }
+        return null;
+    }
+    private void addNode(Node node) {
+        if (node.value == 0) {
+            return;
+        }
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node curNode = nodeList.get(i);
+            if (curNode.row > node.row || (curNode.row == node.row && curNode.col > node.col)) {
+                nodeList.add(i, node);
+                return;
+            }
+        }
+        nodeList.add(node);
+    }
+    private void removeNode(int row, int col) {
+        for (int i = 0; i < nodeList.size(); i++) {
+            Node node = nodeList.get(i);
+            if (node.row == row && node.col == col) {
+                nodeList.remove(i);
+                return;
+            }
+        }
+    }
+    private class Node {
+        private int row;
+        private int col;
+        private int value;
+
+        public Node(int row, int col, int value) {
+            this.row = row;
+            this.col = col;
+            this.value = value;
+        }
+    }
+}
